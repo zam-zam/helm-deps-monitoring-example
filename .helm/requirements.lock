@@ -1,0 +1,18 @@
+dependencies:
+- name: prometheus-operator
+  repository: https://kubernetes-charts.storage.googleapis.com
+  version: 6.7.4
+- name: grafana-dashboards-1.10
+  repository: file://subcharts/grafana-dashboards-1.10
+  version: 0.1.0
+- name: kibana
+  repository: https://helm.elastic.co
+  version: 7.4.1
+- name: fluent-bit
+  repository: https://kubernetes-charts.storage.googleapis.com
+  version: 2.8.2
+- name: metrics-server
+  repository: https://kubernetes-charts.storage.googleapis.com
+  version: 2.8.8
+digest: sha256:41fb2662ff7ce26298c538bf3e7f867f768e4e39b755dd9f93de6a86b7deb08b
+generated: "2019-11-21T13:19:38.324974+03:00"

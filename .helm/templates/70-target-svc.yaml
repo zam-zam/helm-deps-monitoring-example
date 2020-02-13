@@ -1,0 +1,180 @@
+{{ if .Values.externalServicesEndpoints.elasticsearch }}
+---
+##
+# Elasticsearch
+##
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    prometheus-target: elasticsearch
+    env: {{ .Values.env | default "" }}
+    service_type: external
+  name: elasticsearch
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+  - name: metrics
+    port: {{ .Values.externalServicesMetricsPorts.elasticsearch }}
+    protocol: TCP
+    targetPort: {{ .Values.externalServicesMetricsPorts.elasticsearch }}
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  labels:
+    prometheus-target: elasticsearch
+  name: elasticsearch
+subsets:
+- addresses:
+{{ toYaml .Values.externalServicesEndpoints.elasticsearch | indent 2 }}
+  ports:
+  - name: metrics
+    port: {{ .Values.externalServicesMetricsPorts.elasticsearch }}
+    protocol: TCP
+{{ end }}
+{{ if .Values.externalServicesEndpoints.postgresGc }}
+---
+##
+# Postgres GC
+##
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    prometheus-target: postgres-gc
+    env: {{ .Values.env | default "" }}
+    service_type: external
+  name: postgres-gc
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+  - name: metrics
+    port: {{ .Values.externalServicesMetricsPorts.postgresGc }}
+    protocol: TCP
+    targetPort: {{ .Values.externalServicesMetricsPorts.postgresGc }}
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  labels:
+    prometheus-target: postgres-gc
+  name: postgres-gc
+subsets:
+- addresses:
+{{ toYaml .Values.externalServicesEndpoints.postgresGc | indent 2 }}
+  ports:
+  - name: metrics
+    port: {{ .Values.externalServicesMetricsPorts.postgresGc }}
+    protocol: TCP
+{{ end }}
+{{ if .Values.externalServicesEndpoints.postgresProfile }}
+---
+##
+# Postgres Profile
+##
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    prometheus-target: postgres-profile
+    env: {{ .Values.env | default "" }}
+    service_type: external
+  name: postgres-profile
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+  - name: metrics
+    port: {{ .Values.externalServicesMetricsPorts.postgresProfile }}
+    protocol: TCP
+    targetPort: {{ .Values.externalServicesMetricsPorts.postgresProfile }}
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  labels:
+    prometheus-target: postgres-profile
+  name: postgres-profile
+subsets:
+- addresses:
+{{ toYaml .Values.externalServicesEndpoints.postgresProfile | indent 2 }}
+  ports:
+  - name: metrics
+    port: {{ .Values.externalServicesMetricsPorts.postgresProfile }}
+    protocol: TCP
+{{ end }}
+{{ if .Values.externalServicesEndpoints.redis }}
+---
+##
+# Redis
+##
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    prometheus-target: redis
+    env: {{ .Values.env | default "" }}
+    service_type: external
+  name: redis
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+  - name: metrics
+    port: {{ .Values.externalServicesMetricsPorts.redis }}
+    protocol: TCP
+    targetPort: {{ .Values.externalServicesMetricsPorts.redis }}
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  labels:
+    prometheus-target: redis
+  name: redis
+subsets:
+- addresses:
+{{ toYaml .Values.externalServicesEndpoints.redis | indent 2 }}
+  ports:
+  - name: metrics
+    port: {{ .Values.externalServicesMetricsPorts.redis }}
+    protocol: TCP
+{{ end }}
+{{ if .Values.externalServicesEndpoints.kafka }}
+---
+##
+# Kafka
+##
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    prometheus-target: kafka
+    env: {{ .Values.env | default "" }}
+    service_type: external
+  name: kafka
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+  - name: metrics
+    port: {{ .Values.externalServicesMetricsPorts.kafka }}
+    protocol: TCP
+    targetPort: {{ .Values.externalServicesMetricsPorts.kafka }}
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  labels:
+    prometheus-target: kafka
+  name: kafka
+subsets:
+- addresses:
+{{ toYaml .Values.externalServicesEndpoints.kafka | indent 2 }}
+  ports:
+  - name: metrics
+    port: {{ .Values.externalServicesMetricsPorts.kafka }}
+    protocol: TCP
+{{ end }}

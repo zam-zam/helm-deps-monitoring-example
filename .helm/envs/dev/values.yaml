@@ -1,0 +1,69 @@
+metrics-server:
+  enabled: true
+
+fluent-bit:
+  enabled: true
+  backend:
+    type: splunk
+    splunk:
+      host:
+      port: 8088
+  env:
+    - name: K8S_CLUSTER
+      value: dev
+  taildb:
+    directory: /var/lib/fluent-bit
+  extraVolumes: []
+  extraVolumeMounts: []
+
+grafana-dashboards-1-10:
+  enabled: true
+
+prometheus-operator:
+
+  grafana:
+    ingress:
+      enabled: true
+      hosts:
+        - grafana.k8s.example.com
+
+  kubeControllerManager:
+    endpoints:
+      - 
+      -
+
+  kubeEtcd:
+    endpoints:
+      -
+      -
+    serviceMonitor:
+      scheme: https
+      caFile: "/etc/prometheus/secrets/prometheus-etcd/etcd-ca"
+      certFile: "/etc/prometheus/secrets/prometheus-etcd/etcd-client"
+      keyFile: "/etc/prometheus/secrets/prometheus-etcd/etcd-client-key"
+
+  prometheus:
+    ingress:
+      enabled: true
+      hosts:
+        - prometheus.k8s.example.com
+    prometheusSpec:
+      secrets:
+        - prometheus-etcd
+      retentionSize: 2GB
+
+  coreDns:
+    enabled: false
+
+  kubeDns:
+    enabled: true
+
+  kubeProxy:
+    enabled: false
+
+externalServicesEndpoints:
+  elasticsearch:
+    - ip:
+    - ip:
+  postgresGc:
+    - ip:

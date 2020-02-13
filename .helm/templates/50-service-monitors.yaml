@@ -1,0 +1,205 @@
+---
+# Elasticsearch
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app: elasticsearch
+    release: {{ .Release.Name }}
+  name: {{ .Release.Name }}-elasticsearch
+spec:
+  endpoints:
+  - interval: 60s
+    path: /metrics
+    port: metrics
+  selector:
+    matchLabels:
+      prometheus-target: elasticsearch
+  targetLabels:
+    - env
+    - service_type
+  namespaceSelector:
+    any: true
+---
+# Postgres GC
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app: postgres-gc
+    release: {{ .Release.Name }}
+  name: {{ .Release.Name }}-postgres-gc
+spec:
+  endpoints:
+  - interval: 60s
+    path: /metrics
+    port: metrics
+  selector:
+    matchLabels:
+      prometheus-target: postgres-gc
+  targetLabels:
+    - env
+    - service_type
+  namespaceSelector:
+    any: true
+---
+# Postgres Profile
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app: postgres-profile
+    release: {{ .Release.Name }}
+  name: {{ .Release.Name }}-postgres-profile
+spec:
+  endpoints:
+  - interval: 60s
+    path: /metrics
+    port: metrics
+  selector:
+    matchLabels:
+      prometheus-target: postgres-profile
+  targetLabels:
+    - env
+    - service_type
+  namespaceSelector:
+    any: true
+---
+# Redis
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app: redis
+    release: {{ .Release.Name }}
+  name: {{ .Release.Name }}-redis
+spec:
+  endpoints:
+  - interval: 60s
+    path: /metrics
+    port: metrics
+  selector:
+    matchLabels:
+      prometheus-target: redis
+  targetLabels:
+    - env
+    - service_type
+  namespaceSelector:
+    any: true
+---
+# Kafka
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app: kafka
+    release: {{ .Release.Name }}
+  name: {{ .Release.Name }}-kafka
+spec:
+  endpoints:
+  - interval: 60s
+    path: /metrics
+    port: metrics
+  selector:
+    matchLabels:
+      prometheus-target: kafka
+  targetLabels:
+    - env
+    - service_type
+  namespaceSelector:
+    any: true
+---
+# CSV-parser
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app: csv-parser
+    release: {{ .Release.Name }}
+  name: {{ .Release.Name }}-csv-parser
+spec:
+  endpoints:
+  - interval: 15s
+    path: /metrics
+    port: metrics
+  selector:
+    matchLabels:
+      prometheus-target: csv-parser
+  namespaceSelector:
+    any: true
+---
+# Text-parser
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app: text-parser
+    release: {{ .Release.Name }}
+  name: {{ .Release.Name }}-text-parser
+spec:
+  endpoints:
+  - interval: 15s
+    path: /metrics
+    port: metrics
+  selector:
+    matchLabels:
+      prometheus-target: text-parser
+  namespaceSelector:
+    any: true
+---
+# GC-backend
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app: gc-backend
+    release: {{ .Release.Name }}
+  name: {{ .Release.Name }}-gc-backend
+spec:
+  endpoints:
+  - interval: 15s
+    path: /metrics
+    port: metrics
+  selector:
+    matchLabels:
+      prometheus-target: gc-backend
+  namespaceSelector:
+    any: true
+---
+# Profile
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app: profile
+    release: {{ .Release.Name }}
+  name: {{ .Release.Name }}-profile
+spec:
+  endpoints:
+  - interval: 15s
+    path: /metrics
+    port: metrics
+  selector:
+    matchLabels:
+      prometheus-target: profile
+  namespaceSelector:
+    any: true
+---
+# Alerts-backend
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app: alerts-backend
+    release: {{ .Release.Name }}
+  name: {{ .Release.Name }}-alerts-backend
+spec:
+  endpoints:
+  - interval: 15s
+    path: /metrics
+    port: metrics
+  selector:
+    matchLabels:
+      prometheus-target: alerts-backend
+  namespaceSelector:
+    any: true

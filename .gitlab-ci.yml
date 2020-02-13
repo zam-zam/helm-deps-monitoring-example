@@ -1,0 +1,48 @@
+stages:
+  - deploy
+
+.use_dev_runner:
+  tags:
+    - dev
+
+.use_prod_runner:
+  tags:
+    - prod
+
+.deploy_k8s_base:
+  stage: deploy
+  image: base-helm
+  variables:
+    APP: k8s
+    VERSION: ${CI_COMMIT_REF_SLUG}
+    NODEPS: "true"
+    CHART_LOCAL: "true"
+  script:
+    - exit 0
+  when: manual
+
+deploy:dev:
+  extends:
+    - .deploy_k8s_base
+    - .use_dev_runner
+  variables:
+    ENV: monitoring
+    CLUSTER:
+    TOKEN: ${SECRET_KUBE_TOKEN_PROD}
+    GPG_PRIVATE_KEY_BASE64: ${SECRET_GPG_PRIVATE_KEY}
+
+    valuesFile_dev: envs/dev/values.yaml
+    valuesFile_devSecrets: envs/dev/secrets.yaml
+
+deploy:prod:
+  extends:
+    - .deploy_k8s_base
+    - .use_prod_runner
+  variables:
+    ENV: monitoring
+    CLUSTER:
+    TOKEN: ${SECRET_KUBE_TOKEN_PROD}
+    GPG_PRIVATE_KEY_BASE64: ${SECRET_GPG_PRIVATE_KEY}
+
+    valuesFile_dev: envs/prod/values.yaml
+    valuesFile_devSecrets: envs/prod/secrets.yaml

@@ -1,0 +1,122 @@
+# Common settings
+metrics-server:
+  enabled: false
+  args:
+    - --kubelet-preferred-address-types=InternalIP
+    - --kubelet-insecure-tls
+    - --metric-resolution=60s
+
+fluent-bit:
+  enabled: false
+  trackOffsets: true
+  backend:
+    splunk:
+      send_raw: "off"
+      tls: "on"
+      tls_verify: "off"
+  filter:
+    mergeJSONLog: true
+  rawConfig: |-
+    @INCLUDE fluent-bit-service.conf
+    @INCLUDE fluent-bit-input.conf
+    @INCLUDE fluent-bit-filter.conf
+    [FILTER]
+      Name        modify
+      Match       *
+      Add         k8s_cluster ${K8S_CLUSTER}
+    @INCLUDE fluent-bit-output.conf
+  # When Keep_Log is disabled, the log field is removed from the incoming message once it has been successfully merged (Merge_Log must be enabled as well).
+  extraEntries:
+    filter: |-
+      Keep_Log Off
+  taildb:
+    directory: /opt/var/lib/fluent-bit
+  extraVolumes:
+    - name: optvarlibdockercontainers
+      hostPath:
+        path: /opt/var/lib/docker/containers
+  extraVolumeMounts:
+    - name: optvarlibdockercontainers
+      mountPath: /opt/var/lib/docker/containers
+      readOnly: true
+
+kibana:
+  enabled: false
+  imageTag: "6.8.0"
+
+grafana-dashboards-1-10:
+  enabled: false
+
+prometheus-operator:
+  # Globally enable prometheus-operator
+  enabled: true
+  ## Configuration for alertmanager
+  ## ref: https://prometheus.io/docs/alerting/alertmanager/
+  ##
+  alertmanager:
+    enabled: false
+  ## Using default values from https://github.com/helm/charts/blob/master/stable/grafana/values.yaml
+  ##
+  grafana:
+    enabled: true
+    defaultDashboardsEnabled: true
+    adminUser: admin
+    adminPassword: admin
+    sidecar:
+      dashboards:
+        label: grafana_dashboard
+  ## Component scraping the kube api server
+  ##
+  kubeApiServer:
+    enabled: true
+  ## Component scraping the kubelet and kubelet-hosted cAdvisor
+  ##
+  kubelet:
+    enabled: true
+  ## Component scraping the kube controller manager
+  ##
+  kubeControllerManager:
+    enabled: true
+  ## Component scraping coreDns. Use either this or kubeDns
+  ##
+  coreDns:
+    enabled: true
+  ## Component scraping kubeDns. Use either this or coreDns
+  ##
+  kubeDns:
+    enabled: false
+  ## Component scraping etcd
+  ##
+  kubeEtcd:
+    enabled: true
+  ## Component scraping kube scheduler
+  ##
+  kubeScheduler:
+    enabled: true
+  ## Component scraping kube proxy
+  ##
+  kubeProxy:
+    enabled: true
+  ## Component scraping kube state metrics
+  ##
+  kubeStateMetrics:
+    enabled: true
+  ## Deploy node exporter as a daemonset to all nodes
+  ##
+  nodeExporter:
+    enabled: true
+  ## Manages Prometheus and Alertmanager components
+  ##
+  prometheusOperator:
+    enabled: true
+  ## Deploy a Prometheus instance
+  ##
+  prometheus:
+    enabled: true
+
+externalServicesMetricsPorts:
+  elasticsearch: 9114
+  postgresGc: 9187
+  postgresProfile: 9187
+  redis: 9121
+  kafka: 9308
